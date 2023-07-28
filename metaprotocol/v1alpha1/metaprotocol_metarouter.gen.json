@@ -1,0 +1,336 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "metaprotocol.aeraki.io.v1alpha1.Destination": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The name of a service from the service registry. Service names are looked up from the platform's service registry (e.g., Kubernetes services, Consul services, etc.) and from the hosts declared by [ServiceEntry](https://istio.io/docs/reference/config/networking/service-entry/#ServiceEntry). Traffic forwarded to destinations that are not found in either of the two, will be dropped.",
+            "type": "string"
+          },
+          "subset": {
+            "description": "The name of a subset within the service. Applicable only to services within the mesh. The subset must be defined in a corresponding DestinationRule.",
+            "type": "string"
+          },
+          "port": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.PortSelector"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.GlobalRateLimit": {
+        "description": "GlobalRateLimit configures global rate limit service for MetaProtocol proxy",
+        "type": "object",
+        "properties": {
+          "match": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.MetaRouteMatch"
+          },
+          "domain": {
+            "description": "The rate limit domain to use when calling the rate limit service.",
+            "type": "string"
+          },
+          "requestTimeout": {
+            "description": "The timeout in milliseconds for the rate limit service RPC. If not set, this defaults to 20ms.",
+            "type": "string"
+          },
+          "denyOnFail": {
+            "description": "The filter's behavior in case the rate limiting service does not respond back. When it is set to true, Envoy will not allow traffic in case of communication failure between rate limiting service and the proxy.",
+            "type": "boolean"
+          },
+          "rateLimitService": {
+            "description": "The cluster name of the external rate limit service provider.",
+            "type": "string"
+          },
+          "descriptors": {
+            "description": "Defines what properties in the requests should be sent to the rate limit service",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.GlobalRateLimit.Descriptor"
+            }
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.GlobalRateLimit.Descriptor": {
+        "description": "Descriptor defines the mapping between the property in the request and the descriptor key in the rate limit server configuration Normally the property is the same as the descriptor key, but adding a mapping layer allows more flexibility",
+        "type": "object",
+        "properties": {
+          "property": {
+            "description": "The property extracted from the requests",
+            "type": "string"
+          },
+          "descriptorKey": {
+            "description": "The corresponding descriptor key in the rate limit server configuration",
+            "type": "string"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.KeyValue": {
+        "description": "KeyValue defines a Key /value pair.",
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "Key name.",
+            "type": "string"
+          },
+          "value": {
+            "description": "alue.",
+            "type": "string"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.LocalRateLimit": {
+        "description": "LocalRateLimit defines local rate limit policies for MetaProtocol proxy",
+        "type": "object",
+        "properties": {
+          "tokenBucket": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.LocalRateLimit.TokenBucket"
+          },
+          "conditions": {
+            "description": "The more specific rate limit conditions, the first match will be used.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.LocalRateLimit.Condition"
+            }
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.LocalRateLimit.Condition": {
+        "description": "Condition defines a rate limit policy for a more specific condition",
+        "type": "object",
+        "properties": {
+          "match": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.MetaRouteMatch"
+          },
+          "tokenBucket": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.LocalRateLimit.TokenBucket"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.LocalRateLimit.TokenBucket": {
+        "description": "Configures a token bucket which is used for rate limiting.",
+        "type": "object",
+        "properties": {
+          "maxTokens": {
+            "description": "The maximum tokens that the bucket can hold. This is also the number of tokens that the bucket initially contains. The value must be greater than 0.",
+            "type": "integer"
+          },
+          "tokensPerFill": {
+            "description": "The number of tokens added to the bucket during each fill interval. The value must be greater than 0. If not specified, defaults to a single token.",
+            "type": "integer",
+            "nullable": true
+          },
+          "fillInterval": {
+            "description": "The fill interval that tokens are added to the bucket. During each fill interval `tokens_per_fill` are added to the bucket. The bucket will never contain more than `max_tokens` tokens.",
+            "type": "string"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.MetaRoute": {
+        "description": "Describes match conditions and actions for routing MetaProtocol.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name assigned to the route for debugging purposes.",
+            "type": "string"
+          },
+          "match": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.MetaRouteMatch"
+          },
+          "route": {
+            "description": "A Route rule can forward (default) traffic. The forwarding target can be one of several versions of a service (see glossary in beginning of document). Weights associated with the service version determine the proportion of traffic it receives.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.MetaRouteDestination"
+            }
+          },
+          "mirror": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.Destination"
+          },
+          "mirrorPercentage": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.Percent"
+          },
+          "requestMutation": {
+            "description": "Specifies a list of key-value pairs that should be mutated for each request. How to interpret the key-value pairs depends on the codec implementation",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.KeyValue"
+            }
+          },
+          "responseMutation": {
+            "description": "Specifies a list of key-value pairs that should be mutated for each response. How to interpret the key-value pairs depends on the codec implementation",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.KeyValue"
+            }
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.MetaRouteDestination": {
+        "type": "object",
+        "properties": {
+          "destination": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.Destination"
+          },
+          "weight": {
+            "description": "The proportion of traffic to be forwarded to the service version. (0-100). Sum of weights across destinations SHOULD BE == 100. If there is only one destination in a rule, the weight value is assumed to be 100.",
+            "type": "integer"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.MetaRouteMatch": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "description": "If the value is empty and only the name of attribute is specified, presence of the attribute is checked.",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.StringMatch"
+            }
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.MetaRouter": {
+        "description": "MetaRouter defines route policies for MetaProtocol proxy.",
+        "type": "object",
+        "properties": {
+          "hosts": {
+            "description": "The destination service to which traffic is being sent. *Note for Kubernetes users*: It must be a fully qualified domain name (FQDN), (e.g. \"thrift-sample-server.meta-thrift.svc.cluster.local\" ) instead of a short name (e.g. \"thrift-sample-server\"). *Note*: Only one host is supported now. If multiple hosts are specified, Only the first one takes effect.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "gateways": {
+            "description": "The names of gateways and sidecars that should apply these routes. The usage of this field is the same as istio.io/VirtualService",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "routes": {
+            "description": "An ordered list of route rules for MetaProtocol traffic. The route rules will be applied to service ports named \"tcp-metaprotocol-${applicationProtocol}-*\", (e.g. \"tcp-metaprotocol-thrift-hello-server\"). Order maters in the routes, The first rule matching an incoming request is used.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.MetaRoute"
+            }
+          },
+          "localRateLimit": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.LocalRateLimit"
+          },
+          "globalRateLimit": {
+            "$ref": "#/components/schemas/metaprotocol.aeraki.io.v1alpha1.GlobalRateLimit"
+          },
+          "exportTo": {
+            "description": "A list of namespaces to which this MetaRouter is exported. Exporting a MetaRouter allows it to be used by sidecars defined in other namespaces. This feature provides a mechanism for service owners and mesh administrators to control the visibility of MetaRouter across namespace boundaries.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.Percent": {
+        "description": "Percent specifies a percentage in the range of [0.0, 100.0].",
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.PortSelector": {
+        "description": "PortSelector specifies the number of a port to be used for matching or selection for final routing.",
+        "type": "object",
+        "properties": {
+          "number": {
+            "description": "Valid port number",
+            "type": "integer"
+          }
+        }
+      },
+      "metaprotocol.aeraki.io.v1alpha1.StringMatch": {
+        "description": "Describes how to match a given string in HTTP headers. Match is case-sensitive.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "exact"
+            ],
+            "properties": {
+              "exact": {
+                "description": "exact string match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "prefix"
+            ],
+            "properties": {
+              "prefix": {
+                "description": "prefix-based match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "regex"
+            ],
+            "properties": {
+              "regex": {
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

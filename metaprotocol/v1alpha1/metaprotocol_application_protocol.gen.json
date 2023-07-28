@@ -1,0 +1,23 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "",
+    "version": "v1alpha1"
+  },
+  "components": {
+    "schemas": {
+      "metaprotocol.aeraki.io.v1alpha1.ApplicationProtocol": {
+        "description": "ApplicationProtocol defines an application protocol built on top of MetaProtocol.",
+        "type": "object",
+        "properties": {
+          "protocol": {
+            "type": "string"
+          },
+          "codec": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

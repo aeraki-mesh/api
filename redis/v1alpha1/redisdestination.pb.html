@@ -1,0 +1,284 @@
+---
+title: Redis Destination
+description: Configuration affecting auth , discovery_endpoints etc.
+layout: protoc-gen-docs
+generator: protoc-gen-docs
+schema: redis.aeraki.io.v1alpha1.RedisDestination
+number_of_entries: 8
+---
+<p>RedisDestination defines policies that apply to redis traffic intended for a redis service</p>
+
+<h2 id="RedisDestination">RedisDestination</h2>
+<section>
+<p>RedisDestination defines policies that apply to redis traffic intended for a redis service</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RedisDestination-host">
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="RedisDestination-traffic_policy">
+<td><code>trafficPolicy</code></td>
+<td><code><a href="#TrafficPolicy">TrafficPolicy</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="ConnectionPoolSettings">ConnectionPoolSettings</h2>
+<section>
+<p>Connection pool settings for an upstream host. The settings apply to
+each individual host in the upstream service.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="ConnectionPoolSettings-tcp">
+<td><code>tcp</code></td>
+<td><code><a href="https://istio.io/docs/reference/config/networking/destination-rule.html#ConnectionPoolSettings-TCPSettings">TCPSettings</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="ConnectionPoolSettings-redis">
+<td><code>redis</code></td>
+<td><code><a href="#RedisSettings">RedisSettings</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="Auth">Auth</h2>
+<section>
+<p>Auth provide a way to get redis auth token.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="Auth-secret" class="oneof oneof-start">
+<td><code>secret</code></td>
+<td><code><a href="#SecretReference">SecretReference (oneof)</a></code></td>
+<td>
+<p>Secret use the k8s secret in current namespace.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Auth-plain" class="oneof">
+<td><code>plain</code></td>
+<td><code><a href="#PlainAuth">PlainAuth (oneof)</a></code></td>
+<td>
+<p>redis password.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="SecretReference">SecretReference</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="SecretReference-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretReference-password_field">
+<td><code>passwordField</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="SecretReference-username_field">
+<td><code>usernameField</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="PlainAuth">PlainAuth</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="PlainAuth-password">
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr id="PlainAuth-username">
+<td><code>username</code></td>
+<td><code>string</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RedisSettings">RedisSettings</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RedisSettings-mode">
+<td><code>mode</code></td>
+<td><code><a href="#RedisSettings-Mode">Mode</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RedisSettings-auth">
+<td><code>auth</code></td>
+<td><code><a href="#Auth">Auth</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="RedisSettings-discovery_endpoints">
+<td><code>discoveryEndpoints</code></td>
+<td><code>string[]</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TrafficPolicy">TrafficPolicy</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TrafficPolicy-connection_pool">
+<td><code>connectionPool</code></td>
+<td><code><a href="#ConnectionPoolSettings">ConnectionPoolSettings</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RedisSettings-Mode">RedisSettings.Mode</h2>
+<section>
+<table class="enum-values">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RedisSettings-Mode-PROXY">
+<td><code>PROXY</code></td>
+<td>
+</td>
+</tr>
+<tr id="RedisSettings-Mode-CLUSTER">
+<td><code>CLUSTER</code></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
