@@ -1,4 +1,4 @@
-Note: this repository is forked and modified from [istio/api](https://github.com/istio/api). Thank Istio community for the great work.
+Note: this repository is modified from [istio/api](https://github.com/istio/api). Thank Istio community for the great work.
 
 # Aeraki APIs and Common Configuration Definitions
 
