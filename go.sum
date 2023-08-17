@@ -11,5 +11,5 @@ google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp0
 google.golang.org/protobuf v1.26.0/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQnmE0givc=
 google.golang.org/protobuf v1.30.0 h1:kPPoIgf3TsEvrm0PFe15JQ+570QVxYzEvvHqChK+cng=
 google.golang.org/protobuf v1.30.0/go.mod h1:HV8QOd/L58Z+nl8r43ehVNZIU/HEI6OcFqwMG9pJV4I=
-istio.io/api v1.19.0-alpha.1 h1:piKxgZ1Y9abNin/zw9cp6AFKhhC3Z2UmJRTN0Tm5FEY=
-istio.io/api v1.19.0-alpha.1/go.mod h1:dDMe1TsOtrRoUlBzdxqNolWXpXPQjLfbcXvqPMtQ6eo=
+istio.io/api v0.0.0-20230713061407-06047cce866f h1:Z+KCZ5Eo48Ea3ZrbqyCLvoyT30ZUzCTrGXzoy1Qw5kM=
+istio.io/api v0.0.0-20230713061407-06047cce866f/go.mod h1:dDMe1TsOtrRoUlBzdxqNolWXpXPQjLfbcXvqPMtQ6eo=
